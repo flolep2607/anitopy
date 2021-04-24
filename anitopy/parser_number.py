@@ -186,14 +186,18 @@ def match_multi_episode_pattern(word, token):
 
 
 def match_season_and_episode_pattern(word, token):
-    pattern = 'S?(\\d{1,2})(?:-S?(\\d{1,2}))?' +\
-              '(?:x|[ ._-x]?E)(\\d{1,3})(?:-E?(\\d{1,3}))?$'
+    pattern = r"(?:S?(\d{1,2})(?:-S?(\d{1,2}))?(?:x|[ ._-x]?E)(\d{1,3})(?:-E?(\d{1,3}))?|Season[ ._-x]?(\d{1,3})(?:-(\d{1,3})))"
     match = re.match(pattern, word, flags=re.IGNORECASE)
 
     if match:
-        Elements.insert(ElementCategory.ANIME_SEASON, match.group(1))
-        if match.group(2):
-            Elements.insert(ElementCategory.ANIME_SEASON, match.group(2))
+        if match.group(1):
+            Elements.insert(ElementCategory.ANIME_SEASON, match.group(1))
+            if match.group(2):
+                Elements.insert(ElementCategory.ANIME_SEASON, match.group(2))
+        elif match.group(5):
+            Elements.insert(ElementCategory.ANIME_SEASON, match.group(5))
+            if match.group(6):
+                Elements.insert(ElementCategory.ANIME_SEASON, match.group(6))
         set_episode_number(match.group(3), token, validate=False)
         if match.group(4):
             set_episode_number(match.group(4), token, validate=False)
