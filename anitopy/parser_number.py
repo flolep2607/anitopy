@@ -304,13 +304,13 @@ def match_episode_patterns(word, token):
     if numeric_front and numeric_back:
         if match_single_episode_pattern(word, token):
             return True
-    # e.g. "01-02", "03-05v2"
-    if numeric_front and numeric_back:
-        if match_multi_episode_pattern(word, token):
-            return True
     # e.g. "2x01", "S01E03", "S01-02xE001-150"
     if numeric_back:
         if match_season_and_episode_pattern(word, token):
+            return True
+    # e.g. "01-02", "03-05v2"
+    if numeric_front and numeric_back:
+        if match_multi_episode_pattern(word, token):
             return True
     # e.g. "ED1", "OP4a", "OVA2"
     if not numeric_front:
